@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CoLoCool 🌴</title>
+<!-- Firebase SDK -->
+<script type="module">
+  // On utilisera Firebase en mode module, mais pour simplicité on charge via CDN compat
+</script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fraunces:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sun: #FFD166;
+    --sea: #06B6D4;
+    --coral: #FF6B6B;
+    --mint: #06D6A0;
+    --sand: #FFF8ED;
+    --dark: #1A1A2E;
+    --mid: #4A4A6A;
+    --light: #F0F4FF;
+    --card: #FFFFFF;
+    --radius: 20px;
+    --shadow: 0 8px 32px rgba(26,26,46,0.10);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--sand);
+    color: var(--dark);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+/* BG decoration */
+body::before {
+content: ‘’;
+position: fixed; top: -120px; right: -120px;
+width: 420px; height: 420px;
+background: radial-gradient(circle, #FFD16688 0%, transparent 70%);
+border-radius: 50%; z-index: 0; pointer-events: none;
+}
+body::after {
+content: ‘’;
+position: fixed; bottom: -80px; left: -80px;
+width: 300px; height: 300px;
+background: radial-gradient(circle, #06B6D488 0%, transparent 70%);
+border-radius: 50%; z-index: 0; pointer-events: none;
+}
+
+.app { position: relative; z-index: 1; max-width: 520px; margin: 0 auto; padding: 24px 16px 80px; }
+
+/* Header */
+.header { text-align: center; padding: 32px 0 24px; }
+.header .logo { font-family: ‘Fraunces’, serif; font-size: 2.6rem; color: var(–coral); line-height: 1; }
+.header .logo span { color: var(–sea); }
+.header .tagline { margin-top: 6px; font-size: 1rem; color: var(–mid); font-weight: 600; }
+
+/* Cards */
+.card {
+background: var(–card);
+border-radius: var(–radius);
+box-shadow: var(–shadow);
+padding: 28px 24px;
+margin-bottom: 20px;
+animation: slideUp 0.4s ease both;
+}
+@keyframes slideUp {
+from { opacity: 0; transform: translateY(20px); }
+to   { opacity: 1; transform: translateY(0); }
+}
+.card-title {
+font-family: ‘Fraunces’, serif;
+font-size: 1.3rem; font-weight: 700;
+margin-bottom: 18px; color: var(–dark);
+display: flex; align-items: center; gap: 8px;
+}
+
+/* Form */
+label { display: block; font-size: 0.85rem; font-weight: 700; color: var(–mid); margin-bottom: 5px; letter-spacing: 0.04em; text-transform: uppercase; }
+input, select, textarea {
+width: 100%; padding: 12px 14px;
+border: 2px solid #E8E8F0;
+border-radius: 12px;
+font-family: ‘Nunito’, sans-serif;
+font-size: 1rem; color: var(–dark);
+background: var(–light);
+outline: none; transition: border-color 0.2s, box-shadow 0.2s;
+margin-bottom: 14px;
+}
+input:focus, select:focus, textarea:focus {
+border-color: var(–sea);
+box-shadow: 0 0 0 3px #06B6D422;
+}
+textarea { resize: vertical; min-height: 70px; }
+
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.field-row > div { display: flex; flex-direction: column; }
+
+/* Buttons */
+.btn {
+display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+padding: 14px 24px; border-radius: 14px; border: none; cursor: pointer;
+font-family: ‘Nunito’, sans-serif; font-size: 1rem; font-weight: 800;
+transition: transform 0.15s, box-shadow 0.15s; letter-spacing: 0.01em;
+}
+.btn:hover { transform: translateY(-2px); }
+.btn:active { transform: translateY(0); }
+.btn-primary { background: var(–coral); color: #fff; box-shadow: 0 4px 16px #FF6B6B44; width: 100%; }
+.btn-primary:hover { box-shadow: 0 8px 24px #FF6B6B55; }
+.btn-sea { background: var(–sea); color: #fff; box-shadow: 0 4px 16px #06B6D444; width: 100%; }
+.btn-mint { background: var(–mint); color: #fff; box-shadow: 0 4px 16px #06D6A044; }
+.btn-outline { background: transparent; border: 2px solid var(–sea); color: var(–sea); }
+.btn-sm { padding: 8px 16px; font-size: 0.88rem; border-radius: 10px; }
+
+/* Toggle langue */
+.lang-toggle {
+display: flex; gap: 8px; justify-content: flex-end; margin-bottom: 4px;
+}
+.lang-btn {
+padding: 4px 12px; border-radius: 8px; border: 2px solid #E8E8F0;
+font-family: ‘Nunito’, sans-serif; font-size: 0.82rem; font-weight: 800;
+cursor: pointer; background: white; color: var(–mid); transition: all 0.15s;
+}
+.lang-btn.active { background: var(–sun); border-color: var(–sun); color: var(–dark); }
+
+/* Price type toggle */
+.toggle-group { display: flex; gap: 0; border: 2px solid #E8E8F0; border-radius: 12px; overflow: hidden; margin-bottom: 14px; }
+.toggle-opt {
+flex: 1; padding: 10px 8px; text-align: center; font-weight: 700; font-size: 0.88rem;
+cursor: pointer; background: var(–light); color: var(–mid); transition: all 0.15s;
+border: none; font-family: ‘Nunito’, sans-serif;
+}
+.toggle-opt.active { background: var(–sea); color: #fff; }
+
+/* Invite box */
+.invite-box {
+background: linear-gradient(135deg, #06B6D4, #06D6A0);
+border-radius: 16px; padding: 20px; color: #fff; text-align: center;
+margin-top: 16px;
+}
+.invite-box .invite-title { font-weight: 800; font-size: 1rem; margin-bottom: 8px; }
+.invite-box .invite-link {
+background: rgba(255,255,255,0.25); border-radius: 10px;
+padding: 10px 14px; font-size: 0.85rem; word-break: break-all;
+margin-bottom: 12px; font-weight: 600;
+}
+.invite-box .invite-code { font-size: 0.8rem; opacity: 0.85; margin-bottom: 4px; }
+.invite-box .invite-code strong { font-size: 1.2rem; letter-spacing: 0.12em; }
+
+/* Participant list */
+.participant-item {
+display: flex; align-items: center; gap: 12px;
+padding: 12px 14px; background: var(–light);
+border-radius: 12px; margin-bottom: 8px;
+animation: slideUp 0.3s ease both;
+}
+.avatar {
+width: 40px; height: 40px; border-radius: 50%;
+display: flex; align-items: center; justify-content: center;
+font-size: 1.1rem; font-weight: 900; flex-shrink: 0;
+color: white;
+}
+.participant-info { flex: 1; }
+.participant-name { font-weight: 800; font-size: 0.95rem; }
+.participant-dates { font-size: 0.78rem; color: var(–mid); margin-top: 2px; }
+
+/* Steps indicator */
+.steps { display: flex; gap: 6px; justify-content: center; margin-bottom: 28px; }
+.step { width: 10px; height: 10px; border-radius: 50%; background: #E8E8F0; transition: all 0.3s; }
+.step.active { background: var(–coral); transform: scale(1.3); }
+.step.done { background: var(–mint); }
+
+/* Alert */
+.alert {
+background: #FFF3E0; border: 2px solid var(–sun); border-radius: 12px;
+padding: 10px 14px; font-size: 0.88rem; font-weight: 700; color: #B45309;
+margin-top: -6px; margin-bottom: 14px; display: flex; gap: 6px; align-items: center;
+}
+
+/* Section hidden */
+.hidden { display: none !important; }
+
+/* Success emoji bounce */
+.bounce { animation: bounce 0.5s cubic-bezier(.36,.07,.19,.97) both; }
+@keyframes bounce {
+0%,100% { transform: scale(1); }
+40% { transform: scale(1.25); }
+60% { transform: scale(0.95); }
+}
+
+/* Nav bottom */
+.bottom-nav {
+position: fixed; bottom: 0; left: 0; right: 0;
+background: white; border-top: 2px solid #E8E8F0;
+display: flex; justify-content: space-around; padding: 10px 0 14px;
+z-index: 100;
+}
+.nav-item {
+display: flex; flex-direction: column; align-items: center; gap: 3px;
+font-size: 0.7rem; font-weight: 800; color: var(–mid); cursor: pointer;
+transition: color 0.15s; padding: 4px 12px; border-radius: 10px;
+border: none; background: none; font-family: ‘Nunito’, sans-serif;
+}
+.nav-item .nav-icon { font-size: 1.4rem; line-height: 1; }
+.nav-item.active { color: var(–coral); }
+.nav-item.active .nav-icon { animation: bounce 0.3s ease; }
+
+/* Chips souhaits */
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+.chip {
+padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 700;
+cursor: pointer; border: 2px solid #E8E8F0; background: var(–light);
+color: var(–mid); transition: all 0.15s; font-family: ‘Nunito’, sans-serif;
+}
+.chip.selected { background: var(–sun); border-color: var(–sun); color: var(–dark); }
+
+/* Calendar */
+.cal-day {
+aspect-ratio:1; display:flex; align-items:center; justify-content:center;
+border-radius:8px; font-size:0.82rem; font-weight:700; cursor:pointer;
+transition: all 0.15s; color: var(–dark);
+}
+.cal-day:hover:not(.cal-other):not(.cal-disabled) { background: #E8F4FF; }
+.cal-day.cal-range { background: #E0F7FA; }
+.cal-day.cal-start { background: var(–sea); color: white; border-radius: 8px 0 0 8px; }
+.cal-day.cal-end { background: var(–coral); color: white; border-radius: 0 8px 8px 0; }
+.cal-day.cal-start.cal-end { border-radius: 8px; }
+.cal-day.cal-other { color: #CCC; cursor: default; }
+.cal-day.cal-disabled { color: #DDD; cursor: not-allowed; }
+.cal-header { font-size:0.7rem; font-weight:800; color:var(–mid); padding:4px 0; text-transform:uppercase; }
+
+/* Toast */
+#toast {
+position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px);
+background: var(–dark); color: white; padding: 12px 24px; border-radius: 14px;
+font-weight: 700; font-size: 0.9rem; opacity: 0; transition: all 0.3s; z-index: 200;
+white-space: nowrap;
+}
+#toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+
+</head>
+<body>
+<div class="app">
+
+  <!-- LANG TOGGLE -->
+
+  <div class="lang-toggle">
+    <button class="lang-btn active" onclick="setLang('fr')">🇫🇷 FR</button>
+    <button class="lang-btn" onclick="setLang('en')">🇬🇧 EN</button>
+  </div>
+
+  <!-- HEADER -->
+
+  <div class="header">
+    <div class="logo">CoLo<span>Cool</span> 🌴</div>
+    <div class="tagline" data-i18n="tagline">Organise tes vacances en groupe, sans prise de tête</div>
+  </div>
+
+  <!-- STEPS -->
+
+  <div class="steps" id="steps">
+    <div class="step active" id="step0"></div>
+    <div class="step" id="step1"></div>
+    <div class="step" id="step2"></div>
+  </div>
+
+  <!-- ======================== VIEW: HOME ======================== -->
+
+  <div id="view-home">
+    <div class="card" style="animation-delay:0.05s">
+      <div class="card-title">✨ <span data-i18n="createOrJoin">Créer ou rejoindre</span></div>
+      <button class="btn btn-primary" onclick="showView('view-create')" style="margin-bottom:12px">
+        🏠 <span data-i18n="createStay">Créer un séjour</span>
+      </button>
+      <button class="btn btn-sea" onclick="showView('view-join')" style="margin-bottom:12px">
+        🔗 <span data-i18n="joinStay">Rejoindre un séjour</span>
+      </button>
+
+```
+</div>
+
+<!-- Si un séjour existe déjà -->
+<div id="existing-stay" class="hidden">
+  <div class="card" style="animation-delay:0.1s">
+    <div class="card-title">📋 <span data-i18n="mySejour">Mon séjour</span></div>
+    <div id="existing-info"></div>
+    <button class="btn btn-primary" onclick="goToStay()" style="margin-top:12px">
+      <span data-i18n="openStay">Ouvrir le séjour</span> →
+    </button>
+  </div>
+</div>
+```
+
+  </div>
+
+  <!-- ======================== VIEW: CRÉER ======================== -->
+
+  <div id="view-create" class="hidden">
+    <div class="card">
+      <div class="card-title">🏠 <span data-i18n="createStay">Créer un séjour</span></div>
+
+```
+  <label data-i18n="stayName">Nom du séjour</label>
+  <input type="text" id="stay-name" placeholder="Ex: Week-end à la mer 🌊" />
+
+  <label data-i18n="location">Lieu</label>
+  <input type="text" id="stay-location" placeholder="Ex: Île de Ré" />
+
+  <label>Dates du séjour</label>
+  <!-- Affichage résumé des dates sélectionnées -->
+  <div id="date-summary" onclick="toggleCalendar()" style="cursor:pointer;background:var(--light);border:2px solid #E8E8F0;border-radius:12px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;transition:border-color 0.2s">
+    <span id="date-summary-text" style="font-weight:700;color:var(--mid)">Choisir les dates…</span>
+    <span id="nights-badge" style="display:none;background:var(--sun);color:var(--dark);font-weight:800;font-size:0.82rem;padding:3px 10px;border-radius:20px"></span>
+  </div>
+  <!-- Inputs cachés pour compatibilité avec le reste du code -->
+  <input type="hidden" id="stay-start" />
+  <input type="hidden" id="stay-end" />
+  <!-- Calendrier custom -->
+  <div id="range-calendar" style="display:none;background:white;border:2px solid #E8E8F0;border-radius:16px;padding:16px;margin-bottom:14px;box-shadow:var(--shadow)">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <button onclick="calNav(-1)" style="border:none;background:var(--light);border-radius:8px;padding:6px 12px;cursor:pointer;font-size:1rem">◀</button>
+      <span id="cal-month-label" style="font-weight:800;font-size:0.95rem;color:var(--dark)"></span>
+      <button onclick="calNav(1)" style="border:none;background:var(--light);border-radius:8px;padding:6px 12px;cursor:pointer;font-size:1rem">▶</button>
+    </div>
+    <div id="cal-grid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;text-align:center"></div>
+  </div>
+
+  <label data-i18n="priceType">Prix hébergement 🏠</label>
+  <div class="toggle-group">
+    <button class="toggle-opt active" onclick="setPriceType('global')" id="pt-global" data-i18n="priceGlobal">Total séjour</button>
+    <button class="toggle-opt" onclick="setPriceType('pernight')" id="pt-pernight" data-i18n="pricePerNight">Par nuit</button>
+    <button class="toggle-opt" onclick="setPriceType('free')" id="pt-free" data-i18n="priceFree">Offert 🎁</button>
+  </div>
+
+  <div id="price-input-wrap">
+    <label id="price-label" data-i18n="totalPrice">Prix total (€)</label>
+    <input type="number" id="stay-price" placeholder="0" min="0" />
+  </div>
+
+  <label data-i18n="yourName">Ton prénom (organisateur)</label>
+  <input type="text" id="org-name" placeholder="Ex: Marie" />
+
+  <button class="btn btn-primary" onclick="createStay()">
+    🚀 <span data-i18n="createBtn">Créer le séjour</span>
+  </button>
+  <button class="btn btn-outline btn-sm" onclick="window._editMode ? (window._editMode=false, showView('view-stay')) : showView('view-home')" style="margin-top:10px;width:100%">
+    ← <span data-i18n="back">Retour</span>
+  </button>
+</div>
+```
+
+  </div>
+
+  <!-- ======================== VIEW: REJOINDRE ======================== -->
+
+  <div id="view-join" class="hidden">
+    <div class="card">
+      <div class="card-title">🔗 <span data-i18n="joinStay">Rejoindre un séjour</span></div>
+      <label data-i18n="enterCode">Code d'invitation</label>
+      <input type="text" id="join-code" placeholder="Ex: ABCD12" maxlength="6" style="text-transform:uppercase;letter-spacing:0.12em;font-size:1.3rem;font-weight:800;text-align:center" />
+      <button class="btn btn-sea" onclick="joinWithCode()">
+        🎉 <span data-i18n="joinBtn">Rejoindre</span>
+      </button>
+      <button class="btn btn-outline btn-sm" onclick="showView('view-home')" style="margin-top:10px;width:100%">
+        ← <span data-i18n="back">Retour</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ======================== VIEW: PROFIL PARTICIPANT ======================== -->
+
+  <div id="view-profile" class="hidden">
+    <div class="card">
+      <div class="card-title">👤 <span data-i18n="myProfile">Mon profil</span></div>
+      <div id="stay-welcome" style="background:linear-gradient(135deg,#FF6B6B,#FFD166);border-radius:14px;padding:14px 16px;color:white;font-weight:800;font-size:1rem;margin-bottom:18px"></div>
+
+```
+  <label data-i18n="firstName">Prénom</label>
+  <input type="text" id="p-name" placeholder="Ton prénom" />
+
+  <div class="field-row">
+    <div>
+      <label data-i18n="arrival">Arrivée</label>
+      <input type="date" id="p-start" />
+    </div>
+    <div>
+      <label data-i18n="departure">Départ</label>
+      <input type="date" id="p-end" />
+    </div>
+  </div>
+
+  <label data-i18n="breakfastWishes">Souhaits petit-déj 🥐</label>
+  <div class="chips" id="breakfast-chips">
+    <button class="chip" onclick="toggleChip(this)" data-val="café">☕ Café</button>
+    <button class="chip" onclick="toggleChip(this)" data-val="thé">🍵 Thé</button>
+    <button class="chip" onclick="toggleChip(this)" data-val="jus d'orange">🍊 Jus d'orange</button>
+    <button class="chip" onclick="toggleChip(this)" data-val="tartines">🍞 Tartines</button>
+    <button class="chip" onclick="toggleChip(this)" data-val="croissants">🥐 Croissants</button>
+    <button class="chip" onclick="toggleChip(this)" data-val="yaourts">🥛 Yaourts</button>
+    <button class="chip" onclick="toggleChip(this)" data-val="fruits">🍎 Fruits</button>
+    <button class="chip" onclick="toggleChip(this)" data-val="céréales">🥣 Céréales</button>
+    <button class="chip" onclick="toggleChip(this)" data-val="œufs">🥚 Œufs</button>
+    <button class="chip" onclick="toggleChip(this)" data-val="fromage">🧀 Fromage</button>
+  </div>
+
+  <label data-i18n="otherWishes">Autre souhait ?</label>
+  <div style="display:flex;gap:8px;margin-bottom:14px">
+    <input type="text" id="p-breakfast-other" placeholder="Ajouter..." style="margin-bottom:0;flex:1" onkeydown="if(event.key==='Enter'){event.preventDefault();addCustomChip()}" />
+    <button onclick="addCustomChip()" style="border:none;background:var(--sea);color:white;border-radius:12px;padding:0 16px;font-size:1.2rem;cursor:pointer;flex-shrink:0">+</button>
+  </div>
+
+  <button class="btn btn-primary" onclick="saveProfile()">
+    ✅ <span data-i18n="saveProfile">Enregistrer mon profil</span>
+  </button>
+</div>
+```
+
+  </div>
+
+  <!-- ======================== VIEW: SÉJOUR DASHBOARD ======================== -->
+
+  <div id="view-stay" class="hidden">
+    <div class="card" style="animation-delay:0.05s">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px">
+        <div id="stay-header-info" style="flex:1"></div>
+        <button class="btn btn-outline btn-sm" onclick="editStay()" style="flex-shrink:0;margin-top:4px">✏️ Modifier</button>
+      </div>
+      <!-- Invite -->
+      <div class="invite-box" id="invite-box">
+        <div class="invite-title">🔗 <span data-i18n="inviteTitle">Inviter des amis</span></div>
+        <div class="invite-link" id="invite-link-display"></div>
+        <div class="invite-code" data-i18n="orCode">ou avec le code :</div>
+        <div class="invite-code"><strong id="invite-code-display"></strong></div>
+        <button class="btn btn-mint btn-sm" onclick="copyInvite()" style="margin-top:12px;color:#fff">
+          📋 <span data-i18n="copyLink">Copier le lien</span>
+        </button>
+      </div>
+    </div>
+
+```
+<!-- Participants -->
+<div class="card" style="animation-delay:0.1s">
+  <div class="card-title">👥 <span data-i18n="participants">Participants</span></div>
+  <div id="participants-list"></div>
+  <div id="no-participants" style="color:var(--mid);font-size:0.9rem;text-align:center;padding:10px 0"></div>
+</div>
+
+<!-- Résumé hébergement -->
+<div class="card" style="animation-delay:0.15s">
+  <div class="card-title">🏠 <span data-i18n="lodging">Hébergement</span></div>
+  <div id="lodging-summary"></div>
+</div>
+```
+
+  </div>
+
+</div><!-- /app -->
+
+<!-- BOTTOM NAV (shown only in stay view) -->
+
+<div class="bottom-nav hidden" id="bottom-nav">
+  <button class="nav-item active" onclick="showTab('view-stay')">
+    <span class="nav-icon">🏠</span>
+    <span data-i18n="home">Accueil</span>
+  </button>
+  <button class="nav-item" onclick="showTab('tab-meals')">
+    <span class="nav-icon">🍽️</span>
+    <span data-i18n="meals">Repas</span>
+  </button>
+  <button class="nav-item" onclick="showTab('tab-expenses')">
+    <span class="nav-icon">💰</span>
+    <span data-i18n="expenses">Dépenses</span>
+  </button>
+  <button class="nav-item" onclick="showTab('tab-laundry')">
+    <span class="nav-icon">🛏️</span>
+    <span data-i18n="laundry">Linge</span>
+  </button>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ============================================================
+// I18N
+// ============================================================
+const i18n = {
+  fr: {
+    tagline: "Organise tes vacances en groupe, sans prise de tête",
+    createOrJoin: "Créer ou rejoindre",
+    createStay: "Créer un séjour",
+    joinStay: "Rejoindre un séjour",
+    mySejour: "Mon séjour",
+    openStay: "Ouvrir le séjour",
+    stayName: "Nom du séjour",
+    location: "Lieu",
+    startDate: "Arrivée",
+    endDate: "Départ",
+    priceType: "Type de prix",
+    priceGlobal: "Total séjour",
+    pricePerNight: "Par nuit",
+    priceFree: "Offert 🎁",
+    totalPrice: "Prix total (€)",
+    nightPrice: "Prix par nuit (€)",
+    yourName: "Ton prénom (organisateur)",
+    createBtn: "Créer le séjour",
+    back: "Retour",
+    enterCode: "Code d'invitation",
+    joinBtn: "Rejoindre",
+    myProfile: "Mon profil",
+    firstName: "Prénom",
+    arrival: "Arrivée",
+    departure: "Départ",
+    breakfastWishes: "Souhaits petit-déj 🥐",
+    otherWishes: "Autre souhait ?",
+    saveProfile: "Enregistrer mon profil",
+    inviteTitle: "Inviter des amis",
+    orCode: "ou avec le code :",
+    copyLink: "Copier le lien",
+    participants: "Participants",
+    lodging: "Hébergement",
+    home: "Accueil",
+    meals: "Repas",
+    expenses: "Dépenses",
+    laundry: "Linge",
+    nights: "nuit(s)",
+    free: "Offert 🎁",
+    perNight: "/ nuit",
+    total: "Total",
+    share: "Part estimée",
+    noParticipants: "Personne n'a encore rejoint 🙃",
+    copied: "Lien copié ! 🎉",
+    profileSaved: "Profil enregistré ! 🎉",
+    stayCreated: "Séjour créé ! 🚀",
+    fillAll: "Remplis tous les champs !",
+    stayNotFound: "Séjour introuvable 😕",
+    welcomeTo: "Bienvenue dans",
+  },
+  en: {
+    tagline: "Organise your group holidays, stress-free",
+    createOrJoin: "Create or join",
+    createStay: "Create a stay",
+    joinStay: "Join a stay",
+    mySejour: "My stay",
+    openStay: "Open stay",
+    stayName: "Stay name",
+    location: "Location",
+    startDate: "Arrival",
+    endDate: "Departure",
+    priceType: "Price type",
+    priceGlobal: "Total price",
+    pricePerNight: "Per night",
+    priceFree: "Free 🎁",
+    totalPrice: "Total price (€)",
+    nightPrice: "Price per night (€)",
+    yourName: "Your name (organiser)",
+    createBtn: "Create stay",
+    back: "Back",
+    enterCode: "Invitation code",
+    joinBtn: "Join",
+    myProfile: "My profile",
+    firstName: "First name",
+    arrival: "Arrival",
+    departure: "Departure",
+    breakfastWishes: "Breakfast wishes 🥐",
+    otherWishes: "Other wish?",
+    saveProfile: "Save my profile",
+    inviteTitle: "Invite friends",
+    orCode: "or with code:",
+    copyLink: "Copy link",
+    participants: "Participants",
+    lodging: "Lodging",
+    home: "Home",
+    meals: "Meals",
+    expenses: "Expenses",
+    laundry: "Linen",
+    nights: "night(s)",
+    free: "Free 🎁",
+    perNight: "/ night",
+    total: "Total",
+    share: "Estimated share",
+    noParticipants: "Nobody joined yet 🙃",
+    copied: "Link copied! 🎉",
+    profileSaved: "Profile saved! 🎉",
+    stayCreated: "Stay created! 🚀",
+    fillAll: "Please fill all fields!",
+    stayNotFound: "Stay not found 😕",
+    welcomeTo: "Welcome to",
+  }
+};
+
+let lang = localStorage.getItem('colocool-lang') || 'fr';
+function t(key) { return (i18n[lang] && i18n[lang][key]) || key; }
+
+function setLang(l) {
+  lang = l;
+  localStorage.setItem('colocool-lang', l);
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.textContent.includes(l.toUpperCase())));
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    el.textContent = t(el.getAttribute('data-i18n'));
+  });
+  const stay = getStay();
+  if (stay) { renderParticipants(stay); renderLodgingSummary(stay); }
+}
+
+// ============================================================
+// FIREBASE
+// ============================================================
+const firebaseConfig = {
+  apiKey: "AIzaSyCPBQr6B-NoGQ8T1xjiLdJMNn5BBBPS3bc",
+  authDomain: "colocool-ed2a3.firebaseapp.com",
+  projectId: "colocool-ed2a3",
+  storageBucket: "colocool-ed2a3.firebasestorage.app",
+  messagingSenderId: "122797567782",
+  appId: "1:122797567782:web:9d7692147dc2d04a4c1be7"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+// ============================================================
+// STATE
+// ============================================================
+let _currentStay = null;
+let _stayListener = null;
+
+function getStay() { return _currentStay; }
+function getMe() { try { return JSON.parse(localStorage.getItem('colocool-me')); } catch(e){ return null; } }
+function saveMe(data) { localStorage.setItem('colocool-me', JSON.stringify(data)); }
+
+async function saveStay(data) {
+  _currentStay = data;
+  await db.collection('sejours').doc(data.code).set(data);
+}
+
+async function loadStayByCode(code) {
+  showLoading(true);
+  try {
+    const doc = await db.collection('sejours').doc(code).get();
+    showLoading(false);
+    if (doc.exists) { _currentStay = doc.data(); return _currentStay; }
+    return null;
+  } catch(e) {
+    showLoading(false);
+    console.error(e);
+    showToast('Erreur de connexion ⚠️');
+    return null;
+  }
+}
+
+function startListening(code) {
+  if (_stayListener) _stayListener();
+  localStorage.setItem('colocool-last-code', code);
+  _stayListener = db.collection('sejours').doc(code).onSnapshot(doc => {
+    if (doc.exists) {
+      _currentStay = doc.data();
+      if (currentView === 'view-stay') {
+        renderParticipants(_currentStay);
+        renderLodgingSummary(_currentStay);
+      }
+    }
+  });
+}
+
+function showLoading(show) {
+  let el = document.getElementById('loading-overlay');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'loading-overlay';
+    el.style.cssText = 'position:fixed;inset:0;background:rgba(255,248,237,0.88);display:flex;align-items:center;justify-content:center;z-index:999;';
+    el.innerHTML = '<div style="text-align:center"><div style="font-size:3rem">🌴</div><div style="font-family:Nunito,sans-serif;font-weight:800;color:#4A4A6A;margin-top:10px">Chargement...</div></div>';
+    document.body.appendChild(el);
+  }
+  el.style.display = show ? 'flex' : 'none';
+}
+
+let currentPriceType = 'global';
+let currentView = 'view-home';
+
+// ============================================================
+// VIEWS
+// ============================================================
+const ALL_VIEWS = ['view-home','view-create','view-join','view-profile','view-stay'];
+
+function showView(id) {
+  ALL_VIEWS.forEach(v => document.getElementById(v)?.classList.add('hidden'));
+  document.getElementById(id)?.classList.remove('hidden');
+  currentView = id;
+  updateSteps(id);
+  const inStay = id === 'view-stay';
+  document.getElementById('bottom-nav').classList.toggle('hidden', !inStay);
+  if (inStay) renderStay();
+}
+
+function updateSteps(view) {
+  const map = {'view-home':0,'view-create':0,'view-join':0,'view-profile':1,'view-stay':2};
+  const cur = map[view] ?? 0;
+  [0,1,2].forEach(i => {
+    document.getElementById('step'+i)?.classList.remove('active','done');
+    if (i < cur) document.getElementById('step'+i)?.classList.add('done');
+    if (i === cur) document.getElementById('step'+i)?.classList.add('active');
+  });
+}
+
+// ============================================================
+// CALENDRIER PLAGE DE DATES
+// ============================================================
+let calYear, calMonth, calPickStep = 0;
+function toISO(d) { return d.toISOString().split('T')[0]; }
+function fromISO(s) { return new Date(s + 'T12:00:00'); }
+function fmtDay(s) {
+  return fromISO(s).toLocaleDateString(lang==='fr'?'fr-FR':'en-GB', {day:'numeric', month:'short'});
+}
+
+function toggleCalendar() {
+  const cal = document.getElementById('range-calendar');
+  const open = cal.style.display !== 'none';
+  cal.style.display = open ? 'none' : 'block';
+  document.getElementById('date-summary').style.borderColor = open ? '#E8E8F0' : 'var(--sea)';
+  if (!open) {
+    const start = document.getElementById('stay-start').value;
+    const base = start ? fromISO(start) : new Date();
+    calYear = base.getFullYear(); calMonth = base.getMonth();
+    renderCal();
+  }
+}
+
+function calNav(dir) {
+  calMonth += dir;
+  if (calMonth > 11) { calMonth = 0; calYear++; }
+  if (calMonth < 0)  { calMonth = 11; calYear--; }
+  renderCal();
+}
+
+function renderCal() {
+  const months = lang==='fr'
+    ? ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre']
+    : ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const days = lang==='fr' ? ['Lu','Ma','Me','Je','Ve','Sa','Di'] : ['Mo','Tu','We','Th','Fr','Sa','Su'];
+  document.getElementById('cal-month-label').textContent = months[calMonth] + ' ' + calYear;
+  const start = document.getElementById('stay-start').value;
+  const end   = document.getElementById('stay-end').value;
+  const today = toISO(new Date());
+  const firstDay = new Date(calYear, calMonth, 1);
+  let startDow = (firstDay.getDay() + 6) % 7;
+  const daysInMonth = new Date(calYear, calMonth+1, 0).getDate();
+  let html = days.map(d => `<div class="cal-header">${d}</div>`).join('');
+  for (let i=0; i<startDow; i++) html += `<div class="cal-day cal-other"></div>`;
+  for (let d=1; d<=daysInMonth; d++) {
+    const iso = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    let cls = 'cal-day';
+    if (iso < today) cls += ' cal-disabled';
+    else if (iso === start && iso === end) cls += ' cal-start cal-end';
+    else if (iso === start) cls += ' cal-start';
+    else if (iso === end)   cls += ' cal-end';
+    else if (start && end && iso > start && iso < end) cls += ' cal-range';
+    html += `<div class="${cls}" ${iso >= today ? `onclick="calClick('${iso}')"` : ''}>${d}</div>`;
+  }
+  document.getElementById('cal-grid').innerHTML = html;
+}
+
+function calClick(iso) {
+  const startEl = document.getElementById('stay-start');
+  const endEl   = document.getElementById('stay-end');
+  if (!startEl.value || (startEl.value && endEl.value) || iso < startEl.value) {
+    startEl.value = iso; endEl.value = ''; calPickStep = 1;
+  } else {
+    endEl.value = iso; calPickStep = 0;
+    setTimeout(() => { toggleCalendar(); updateDateSummary(); }, 300);
+  }
+  updateDateSummary(); renderCal();
+}
+
+function updateDateSummary() {
+  const start = document.getElementById('stay-start').value;
+  const end   = document.getElementById('stay-end').value;
+  const textEl = document.getElementById('date-summary-text');
+  const badge  = document.getElementById('nights-badge');
+  if (start && end && end > start) {
+    const n = Math.round((fromISO(end) - fromISO(start)) / 86400000);
+    textEl.innerHTML = `<span style="color:var(--sea)">🛬 ${fmtDay(start)}</span> &nbsp;→&nbsp; <span style="color:var(--coral)">🛫 ${fmtDay(end)}</span>`;
+    badge.textContent = `🌙 ${n} nuit${n>1?'s':''}`;
+    badge.style.display = 'inline-block';
+  } else if (start) {
+    textEl.innerHTML = `<span style="color:var(--sea)">🛬 ${fmtDay(start)}</span> &nbsp;→&nbsp; <span style="color:var(--mid)">Choisir le départ…</span>`;
+    badge.style.display = 'none';
+  } else {
+    textEl.textContent = 'Choisir les dates…'; textEl.style.color = 'var(--mid)'; badge.style.display = 'none';
+  }
+}
+function onStartChange() { updateDateSummary(); }
+function updateNightsCount() { updateDateSummary(); }
+
+// ============================================================
+// PRICE TYPE
+// ============================================================
+function setPriceType(type) {
+  currentPriceType = type;
+  ['global','pernight','free'].forEach(t => {
+    document.getElementById('pt-'+t)?.classList.toggle('active', t === type);
+  });
+  const wrap = document.getElementById('price-input-wrap');
+  if (type === 'free') { wrap.classList.add('hidden'); }
+  else {
+    wrap.classList.remove('hidden');
+    document.getElementById('price-label').textContent = t(type === 'pernight' ? 'nightPrice' : 'totalPrice');
+  }
+}
+
+// ============================================================
+// CREATE STAY
+// ============================================================
+function generateCode() {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  return Array.from({length:6}, () => chars[Math.floor(Math.random()*chars.length)]).join('');
+}
+
+async function createStay() {
+  const name = document.getElementById('stay-name').value.trim();
+  const location = document.getElementById('stay-location').value.trim();
+  const start = document.getElementById('stay-start').value;
+  const end = document.getElementById('stay-end').value;
+  const orgName = document.getElementById('org-name').value.trim();
+  const price = currentPriceType === 'free' ? 0 : parseFloat(document.getElementById('stay-price').value || 0);
+  if (!name || !location || !start || !end || !orgName) { showToast(t('fillAll') + ' ⚠️'); return; }
+  if (start >= end) { showToast('La date de départ doit être après l'arrivée !'); return; }
+  const nights = Math.round((new Date(end) - new Date(start)) / 86400000);
+
+  if (window._editMode) {
+    const stay = getStay();
+    stay.name = name; stay.location = location; stay.start = start;
+    stay.end = end; stay.nights = nights; stay.priceType = currentPriceType;
+    stay.price = price; stay.organizer = orgName;
+    const orgP = stay.participants.find(p => p.isOrganizer);
+    if (orgP) orgP.name = orgName;
+    const outOfRange = stay.participants.filter(p => !p.isOrganizer && (p.start < start || p.end > end));
+    showLoading(true);
+    await saveStay(stay);
+    showLoading(false);
+    window._editMode = false;
+    document.querySelector('#view-create .card-title span').textContent = 'Créer un séjour';
+    document.querySelector('#view-create .btn-primary span').textContent = 'Créer le séjour';
+    if (outOfRange.length > 0) {
+      showToast('Séjour mis à jour ✅', 4000);
+      setTimeout(() => showToast('⚠️ ' + outOfRange.map(p=>p.name).join(', ') + ' : dates à recaler !', 5000), 4200);
+    } else {
+      showToast('Séjour mis à jour ! ✅', 3000);
+    }
+    showView('view-stay');
+    return;
+  }
+
+  const code = generateCode();
+  const stay = { id: Date.now(), name, location, start, end, nights, priceType: currentPriceType, price, code, organizer: orgName, participants: [], createdAt: new Date().toISOString() };
+  const me = { id: Date.now(), name: orgName, start, end, breakfast: [], isOrganizer: true };
+  stay.participants.push(me);
+  saveMe(me);
+  showLoading(true);
+  await saveStay(stay);
+  showLoading(false);
+  startListening(code);
+  showToast(t('stayCreated'));
+  showView('view-stay');
+}
+
+// ============================================================
+// JOIN STAY
+// ============================================================
+async function joinWithCode() {
+  const code = document.getElementById('join-code').value.trim().toUpperCase();
+  if (!code) { showToast(t('fillAll') + ' ⚠️'); return; }
+  const stay = await loadStayByCode(code);
+  if (!stay) { showToast(t('stayNotFound')); return; }
+  const me = getMe();
+  if (me && stay.participants.find(p => String(p.id) === String(me.id))) {
+    startListening(code); showView('view-stay'); return;
+  }
+  startListening(code);
+  showView('view-profile');
+  const welcome = document.getElementById('stay-welcome');
+  welcome.textContent = `${t('welcomeTo')} "${stay.name}" 🎉`;
+  welcome.style.background = 'linear-gradient(135deg,#FF6B6B,#FFD166)';
+  document.getElementById('p-start').value = stay.start;
+  document.getElementById('p-end').value = stay.end;
+}
+
+// ============================================================
+// SAVE PROFILE
+// ============================================================
+function toggleChip(el) { el.classList.toggle('selected'); }
+
+function addCustomChip() {
+  const input = document.getElementById('p-breakfast-other');
+  const val = input.value.trim();
+  if (!val) return;
+  const container = document.getElementById('breakfast-chips');
+  const existing = [...container.querySelectorAll('.chip')].find(c => c.getAttribute('data-val').toLowerCase() === val.toLowerCase());
+  if (existing) { existing.classList.add('selected'); input.value = ''; return; }
+  const chip = document.createElement('button');
+  chip.className = 'chip selected';
+  chip.setAttribute('data-val', val);
+  chip.setAttribute('data-custom', 'true');
+  chip.textContent = val;
+  chip.onclick = function() { this.classList.toggle('selected'); };
+  container.appendChild(chip);
+  input.value = '';
+}
+
+async function saveProfile() {
+  const name = document.getElementById('p-name').value.trim();
+  const start = document.getElementById('p-start').value;
+  const end = document.getElementById('p-end').value;
+  if (!name || !start || !end) { showToast(t('fillAll') + ' ⚠️'); return; }
+  const selected = [...document.querySelectorAll('#breakfast-chips .chip.selected')].map(c => c.getAttribute('data-val'));
+  const other = document.getElementById('p-breakfast-other').value.trim();
+  if (other) selected.push(other);
+
+  const stay = getStay();
+
+  if (window._editParticipantId && stay) {
+    const idx = stay.participants.findIndex(p => String(p.id) === String(window._editParticipantId));
+    if (idx !== -1) {
+      stay.participants[idx] = { ...stay.participants[idx], name, start, end, breakfast: selected };
+      const me = getMe();
+      if (me && String(me.id) === String(window._editParticipantId)) saveMe(stay.participants[idx]);
+    }
+    showLoading(true);
+    await saveStay(stay);
+    showLoading(false);
+    window._editParticipantId = null;
+    showToast('Profil mis à jour ! ✅', 3000);
+    showView('view-stay');
+    return;
+  }
+
+  const me = { id: Date.now(), name, start, end, breakfast: selected, isOrganizer: false };
+  saveMe(me);
+  if (stay) {
+    stay.participants = stay.participants.filter(p => p.name !== name);
+    stay.participants.push(me);
+    showLoading(true);
+    await saveStay(stay);
+    showLoading(false);
+  }
+  showToast(t('profileSaved'));
+  showView('view-stay');
+}
+
+// ============================================================
+// EDIT STAY
+// ============================================================
+function editStay() {
+  const stay = getStay();
+  if (!stay) return;
+  document.getElementById('stay-name').value = stay.name;
+  document.getElementById('stay-location').value = stay.location;
+  document.getElementById('stay-start').value = stay.start;
+  document.getElementById('stay-end').value = stay.end;
+  document.getElementById('stay-price').value = stay.price || 0;
+  document.getElementById('org-name').value = stay.organizer;
+  setPriceType(stay.priceType || 'global');
+  updateDateSummary();
+  window._editMode = true;
+  showView('view-create');
+  document.querySelector('#view-create .card-title span').textContent = 'Modifier le séjour';
+  document.querySelector('#view-create .btn-primary span').textContent = 'Enregistrer les modifications';
+}
+
+// ============================================================
+// EDIT PARTICIPANT
+// ============================================================
+function editParticipant(pid) {
+  const stay = getStay();
+  const p = stay.participants.find(x => String(x.id) === String(pid));
+  if (!p) return;
+  document.getElementById('p-name').value = p.name;
+  document.getElementById('p-start').value = p.start;
+  document.getElementById('p-end').value = p.end;
+  document.querySelectorAll('#breakfast-chips .chip[data-custom]').forEach(c => c.remove());
+  document.querySelectorAll('#breakfast-chips .chip').forEach(chip => {
+    chip.classList.toggle('selected', p.breakfast?.includes(chip.getAttribute('data-val')));
+  });
+  const fixedVals = [...document.querySelectorAll('#breakfast-chips .chip')].map(c => c.getAttribute('data-val'));
+  (p.breakfast || []).filter(v => !fixedVals.includes(v)).forEach(v => {
+    const container = document.getElementById('breakfast-chips');
+    const chip = document.createElement('button');
+    chip.className = 'chip selected'; chip.setAttribute('data-val', v); chip.setAttribute('data-custom', 'true');
+    chip.textContent = v; chip.onclick = function() { this.classList.toggle('selected'); };
+    container.appendChild(chip);
+  });
+  document.getElementById('p-breakfast-other').value = '';
+  const welcome = document.getElementById('stay-welcome');
+  welcome.textContent = 'Modifier le profil de ' + p.name;
+  welcome.style.background = 'linear-gradient(135deg,#06B6D4,#06D6A0)';
+  window._editParticipantId = pid;
+  showView('view-profile');
+}
+
+// ============================================================
+// RENDER STAY
+// ============================================================
+const AVATAR_COLORS = ['#FF6B6B','#06B6D4','#06D6A0','#FFD166','#A78BFA','#F97316','#EC4899'];
+
+function renderStay() {
+  const stay = getStay();
+  if (!stay) return;
+  const fmt = d => new Date(d+'T12:00:00').toLocaleDateString(lang==='fr'?'fr-FR':'en-GB', {day:'numeric',month:'short'});
+  document.getElementById('stay-header-info').innerHTML = `
+    <div style="margin-bottom:14px">
+      <div style="font-family:'Fraunces',serif;font-size:1.5rem;font-weight:700;color:var(--dark)">${stay.name}</div>
+      <div style="color:var(--mid);font-size:0.9rem;margin-top:2px">📍 ${stay.location} · 📅 ${fmt(stay.start)} → ${fmt(stay.end)} (${stay.nights} ${t('nights')})</div>
+    </div>
+  `;
+  const link = `${location.origin}${location.pathname}?code=${stay.code}`;
+  document.getElementById('invite-link-display').textContent = link;
+  document.getElementById('invite-code-display').textContent = stay.code;
+  renderParticipants(stay);
+  renderLodgingSummary(stay);
+}
+
+function renderParticipants(stay) {
+  const list = document.getElementById('participants-list');
+  const noP  = document.getElementById('no-participants');
+  if (!stay.participants || stay.participants.length === 0) {
+    list.innerHTML = ''; noP.textContent = t('noParticipants'); return;
+  }
+  noP.textContent = '';
+  const fmt = d => new Date(d+'T12:00:00').toLocaleDateString(lang==='fr'?'fr-FR':'en-GB', {day:'numeric',month:'short'});
+  list.innerHTML = stay.participants.map((p, i) => {
+    const nights = Math.round((new Date(p.end) - new Date(p.start)) / 86400000);
+    const color  = AVATAR_COLORS[i % AVATAR_COLORS.length];
+    const beforeStay = p.start < stay.start;
+    const afterStay  = p.end > stay.end;
+    const outOfRange = beforeStay || afterStay;
+    const alertMsg = outOfRange ? (beforeStay && afterStay ? '⚠️ Dates avant ET après le séjour' : beforeStay ? '⚠️ Arrivée avant le début du séjour' : '⚠️ Départ après la fin du séjour') : '';
+    return `<div class="participant-item" style="${outOfRange ? 'border:2px solid #FF6B6B;background:#FFF5F5;' : ''}">
+      <div class="avatar" style="background:${color}">${p.name[0].toUpperCase()}</div>
+      <div class="participant-info" style="flex:1">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:6px">
+          <div class="participant-name">${p.name} ${p.isOrganizer ? '👑' : ''}</div>
+          <button onclick="editParticipant('${p.id}')" style="border:none;background:${outOfRange?'var(--coral)':'var(--light)'};color:${outOfRange?'white':'var(--mid)'};border-radius:8px;padding:3px 10px;font-size:0.78rem;font-weight:800;cursor:pointer;font-family:Nunito,sans-serif;white-space:nowrap">✏️ Modifier</button>
+        </div>
+        <div class="participant-dates">${fmt(p.start)} → ${fmt(p.end)} · ${nights} nuit${nights>1?'s':''}</div>
+        ${outOfRange ? `<div style="font-size:0.78rem;color:var(--coral);font-weight:800;margin-top:3px">${alertMsg}</div>` : ''}
+        ${p.breakfast?.length ? `<div style="font-size:0.75rem;color:var(--sea);margin-top:2px">🥐 ${p.breakfast.join(', ')}</div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderLodgingSummary(stay) {
+  const el = document.getElementById('lodging-summary');
+  if (stay.priceType === 'free') { el.innerHTML = `<div style="font-size:1rem;font-weight:700;color:var(--mint)">${t('free')}</div>`; return; }
+  const totalPrice = stay.priceType === 'pernight' ? stay.price * stay.nights : stay.price;
+  const n = stay.participants.length || 1;
+  let rows = '';
+  if (stay.participants.length) {
+    const totalNights = stay.participants.reduce((acc, p) => acc + Math.round((new Date(p.end) - new Date(p.start)) / 86400000), 0);
+    rows = stay.participants.map(p => {
+      const pNights = Math.round((new Date(p.end) - new Date(p.start)) / 86400000);
+      const share = totalNights > 0 ? (pNights / totalNights) * totalPrice : totalPrice / n;
+      return `<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #F0F0F8;font-size:0.9rem">
+        <span style="font-weight:700">${p.name}</span>
+        <span style="color:var(--coral);font-weight:800">${share.toFixed(2)} €</span>
+      </div>`;
+    }).join('');
+  }
+  el.innerHTML = `
+    <div style="display:flex;justify-content:space-between;margin-bottom:12px">
+      <div><span style="font-size:0.8rem;font-weight:700;color:var(--mid);text-transform:uppercase">${t('total')}</span><br>
+        <span style="font-size:1.4rem;font-weight:900;color:var(--dark)">${totalPrice.toFixed(2)} €</span>
+        ${stay.priceType==='pernight'?`<span style="font-size:0.8rem;color:var(--mid)"> (${stay.price}€ ${t('perNight')})</span>`:''}
+      </div>
+    </div>
+    ${rows ? `<div style="font-size:0.78rem;font-weight:800;color:var(--mid);text-transform:uppercase;margin-bottom:4px">${t('share')}</div>${rows}` : ''}
+  `;
+}
+
+// ============================================================
+// COPY INVITE
+// ============================================================
+function copyInvite() {
+  const link = document.getElementById('invite-link-display').textContent;
+  navigator.clipboard.writeText(link).then(() => showToast(t('copied'))).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = link; document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta); showToast(t('copied'));
+  });
+}
+
+function goToStay() { showView('view-stay'); }
+
+function showTab(tabId) {
+  if (tabId !== 'view-stay') { showToast('🚧 Bientôt disponible !'); return; }
+  document.querySelectorAll('.nav-item').forEach((el,i) => el.classList.toggle('active', i===0));
+  showView('view-stay');
+}
+
+// ============================================================
+// TOAST
+// ============================================================
+function showToast(msg, duration=2800) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), duration);
+}
+
+// ============================================================
+// INIT
+// ============================================================
+async function init() {
+  setLang(lang);
+  const params = new URLSearchParams(location.search);
+  const urlCode = params.get('code');
+  const lastCode = localStorage.getItem('colocool-last-code');
+  const codeToLoad = urlCode ? urlCode.toUpperCase() : (lastCode ? lastCode.toUpperCase() : null);
+
+  if (codeToLoad) {
+    if (urlCode) document.getElementById('join-code').value = codeToLoad;
+    const stay = await loadStayByCode(codeToLoad);
+    if (stay) {
+      const me = getMe();
+      startListening(codeToLoad);
+      if (me && stay.participants.find(p => String(p.id) === String(me.id))) {
+        showView('view-stay'); return;
+      }
+      if (urlCode) {
+        showView('view-profile');
+        const welcome = document.getElementById('stay-welcome');
+        welcome.textContent = `${t('welcomeTo')} "${stay.name}" 🎉`;
+        welcome.style.background = 'linear-gradient(135deg,#FF6B6B,#FFD166)';
+        document.getElementById('p-start').value = stay.start;
+        document.getElementById('p-end').value = stay.end;
+        return;
+      }
+      document.getElementById('existing-stay').classList.remove('hidden');
+      const fmt = d => new Date(d+'T12:00:00').toLocaleDateString(lang==='fr'?'fr-FR':'en-GB', {day:'numeric',month:'short'});
+      document.getElementById('existing-info').innerHTML = `
+        <div style="font-weight:800;font-size:1rem">${stay.name}</div>
+        <div style="color:var(--mid);font-size:0.85rem;margin-top:4px">📍 ${stay.location} · ${fmt(stay.start)} → ${fmt(stay.end)}</div>
+        <div style="margin-top:6px;font-size:0.82rem;color:var(--sea);font-weight:700">👥 ${stay.participants.length} participant(s)</div>
+      `;
+    } else {
+      localStorage.removeItem('colocool-last-code');
+    }
+  }
+}
+
+init();
+</script>
+
+</body>
+</html>
