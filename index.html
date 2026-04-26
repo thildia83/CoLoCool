@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
@@ -36,234 +35,230 @@
     overflow-x: hidden;
   }
 
-/* BG decoration */
-body::before {
-content: ‘’;
-position: fixed; top: -120px; right: -120px;
-width: 420px; height: 420px;
-background: radial-gradient(circle, #FFD16688 0%, transparent 70%);
-border-radius: 50%; z-index: 0; pointer-events: none;
-}
-body::after {
-content: ‘’;
-position: fixed; bottom: -80px; left: -80px;
-width: 300px; height: 300px;
-background: radial-gradient(circle, #06B6D488 0%, transparent 70%);
-border-radius: 50%; z-index: 0; pointer-events: none;
-}
+  /* BG decoration */
+  body::before {
+    content: '';
+    position: fixed; top: -120px; right: -120px;
+    width: 420px; height: 420px;
+    background: radial-gradient(circle, #FFD16688 0%, transparent 70%);
+    border-radius: 50%; z-index: 0; pointer-events: none;
+  }
+  body::after {
+    content: '';
+    position: fixed; bottom: -80px; left: -80px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, #06B6D488 0%, transparent 70%);
+    border-radius: 50%; z-index: 0; pointer-events: none;
+  }
 
-.app { position: relative; z-index: 1; max-width: 520px; margin: 0 auto; padding: 24px 16px 80px; }
+  .app { position: relative; z-index: 1; max-width: 520px; margin: 0 auto; padding: 24px 16px 80px; }
 
-/* Header */
-.header { text-align: center; padding: 32px 0 24px; }
-.header .logo { font-family: ‘Fraunces’, serif; font-size: 2.6rem; color: var(–coral); line-height: 1; }
-.header .logo span { color: var(–sea); }
-.header .tagline { margin-top: 6px; font-size: 1rem; color: var(–mid); font-weight: 600; }
+  /* Header */
+  .header { text-align: center; padding: 32px 0 24px; }
+  .header .logo { font-family: 'Fraunces', serif; font-size: 2.6rem; color: var(--coral); line-height: 1; }
+  .header .logo span { color: var(--sea); }
+  .header .tagline { margin-top: 6px; font-size: 1rem; color: var(--mid); font-weight: 600; }
 
-/* Cards */
-.card {
-background: var(–card);
-border-radius: var(–radius);
-box-shadow: var(–shadow);
-padding: 28px 24px;
-margin-bottom: 20px;
-animation: slideUp 0.4s ease both;
-}
-@keyframes slideUp {
-from { opacity: 0; transform: translateY(20px); }
-to   { opacity: 1; transform: translateY(0); }
-}
-.card-title {
-font-family: ‘Fraunces’, serif;
-font-size: 1.3rem; font-weight: 700;
-margin-bottom: 18px; color: var(–dark);
-display: flex; align-items: center; gap: 8px;
-}
+  /* Cards */
+  .card {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 28px 24px;
+    margin-bottom: 20px;
+    animation: slideUp 0.4s ease both;
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .card-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1.3rem; font-weight: 700;
+    margin-bottom: 18px; color: var(--dark);
+    display: flex; align-items: center; gap: 8px;
+  }
 
-/* Form */
-label { display: block; font-size: 0.85rem; font-weight: 700; color: var(–mid); margin-bottom: 5px; letter-spacing: 0.04em; text-transform: uppercase; }
-input, select, textarea {
-width: 100%; padding: 12px 14px;
-border: 2px solid #E8E8F0;
-border-radius: 12px;
-font-family: ‘Nunito’, sans-serif;
-font-size: 1rem; color: var(–dark);
-background: var(–light);
-outline: none; transition: border-color 0.2s, box-shadow 0.2s;
-margin-bottom: 14px;
-}
-input:focus, select:focus, textarea:focus {
-border-color: var(–sea);
-box-shadow: 0 0 0 3px #06B6D422;
-}
-textarea { resize: vertical; min-height: 70px; }
+  /* Form */
+  label { display: block; font-size: 0.85rem; font-weight: 700; color: var(--mid); margin-bottom: 5px; letter-spacing: 0.04em; text-transform: uppercase; }
+  input, select, textarea {
+    width: 100%; padding: 12px 14px;
+    border: 2px solid #E8E8F0;
+    border-radius: 12px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem; color: var(--dark);
+    background: var(--light);
+    outline: none; transition: border-color 0.2s, box-shadow 0.2s;
+    margin-bottom: 14px;
+  }
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--sea);
+    box-shadow: 0 0 0 3px #06B6D422;
+  }
+  textarea { resize: vertical; min-height: 70px; }
 
-.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.field-row > div { display: flex; flex-direction: column; }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .field-row > div { display: flex; flex-direction: column; }
 
-/* Buttons */
-.btn {
-display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-padding: 14px 24px; border-radius: 14px; border: none; cursor: pointer;
-font-family: ‘Nunito’, sans-serif; font-size: 1rem; font-weight: 800;
-transition: transform 0.15s, box-shadow 0.15s; letter-spacing: 0.01em;
-}
-.btn:hover { transform: translateY(-2px); }
-.btn:active { transform: translateY(0); }
-.btn-primary { background: var(–coral); color: #fff; box-shadow: 0 4px 16px #FF6B6B44; width: 100%; }
-.btn-primary:hover { box-shadow: 0 8px 24px #FF6B6B55; }
-.btn-sea { background: var(–sea); color: #fff; box-shadow: 0 4px 16px #06B6D444; width: 100%; }
-.btn-mint { background: var(–mint); color: #fff; box-shadow: 0 4px 16px #06D6A044; }
-.btn-outline { background: transparent; border: 2px solid var(–sea); color: var(–sea); }
-.btn-sm { padding: 8px 16px; font-size: 0.88rem; border-radius: 10px; }
+  /* Buttons */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 14px 24px; border-radius: 14px; border: none; cursor: pointer;
+    font-family: 'Nunito', sans-serif; font-size: 1rem; font-weight: 800;
+    transition: transform 0.15s, box-shadow 0.15s; letter-spacing: 0.01em;
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn:active { transform: translateY(0); }
+  .btn-primary { background: var(--coral); color: #fff; box-shadow: 0 4px 16px #FF6B6B44; width: 100%; }
+  .btn-primary:hover { box-shadow: 0 8px 24px #FF6B6B55; }
+  .btn-sea { background: var(--sea); color: #fff; box-shadow: 0 4px 16px #06B6D444; width: 100%; }
+  .btn-mint { background: var(--mint); color: #fff; box-shadow: 0 4px 16px #06D6A044; }
+  .btn-outline { background: transparent; border: 2px solid var(--sea); color: var(--sea); }
+  .btn-sm { padding: 8px 16px; font-size: 0.88rem; border-radius: 10px; }
 
-/* Toggle langue */
-.lang-toggle {
-display: flex; gap: 8px; justify-content: flex-end; margin-bottom: 4px;
-}
-.lang-btn {
-padding: 4px 12px; border-radius: 8px; border: 2px solid #E8E8F0;
-font-family: ‘Nunito’, sans-serif; font-size: 0.82rem; font-weight: 800;
-cursor: pointer; background: white; color: var(–mid); transition: all 0.15s;
-}
-.lang-btn.active { background: var(–sun); border-color: var(–sun); color: var(–dark); }
+  /* Toggle langue */
+  .lang-toggle {
+    display: flex; gap: 8px; justify-content: flex-end; margin-bottom: 4px;
+  }
+  .lang-btn {
+    padding: 4px 12px; border-radius: 8px; border: 2px solid #E8E8F0;
+    font-family: 'Nunito', sans-serif; font-size: 0.82rem; font-weight: 800;
+    cursor: pointer; background: white; color: var(--mid); transition: all 0.15s;
+  }
+  .lang-btn.active { background: var(--sun); border-color: var(--sun); color: var(--dark); }
 
-/* Price type toggle */
-.toggle-group { display: flex; gap: 0; border: 2px solid #E8E8F0; border-radius: 12px; overflow: hidden; margin-bottom: 14px; }
-.toggle-opt {
-flex: 1; padding: 10px 8px; text-align: center; font-weight: 700; font-size: 0.88rem;
-cursor: pointer; background: var(–light); color: var(–mid); transition: all 0.15s;
-border: none; font-family: ‘Nunito’, sans-serif;
-}
-.toggle-opt.active { background: var(–sea); color: #fff; }
+  /* Price type toggle */
+  .toggle-group { display: flex; gap: 0; border: 2px solid #E8E8F0; border-radius: 12px; overflow: hidden; margin-bottom: 14px; }
+  .toggle-opt {
+    flex: 1; padding: 10px 8px; text-align: center; font-weight: 700; font-size: 0.88rem;
+    cursor: pointer; background: var(--light); color: var(--mid); transition: all 0.15s;
+    border: none; font-family: 'Nunito', sans-serif;
+  }
+  .toggle-opt.active { background: var(--sea); color: #fff; }
 
-/* Invite box */
-.invite-box {
-background: linear-gradient(135deg, #06B6D4, #06D6A0);
-border-radius: 16px; padding: 20px; color: #fff; text-align: center;
-margin-top: 16px;
-}
-.invite-box .invite-title { font-weight: 800; font-size: 1rem; margin-bottom: 8px; }
-.invite-box .invite-link {
-background: rgba(255,255,255,0.25); border-radius: 10px;
-padding: 10px 14px; font-size: 0.85rem; word-break: break-all;
-margin-bottom: 12px; font-weight: 600;
-}
-.invite-box .invite-code { font-size: 0.8rem; opacity: 0.85; margin-bottom: 4px; }
-.invite-box .invite-code strong { font-size: 1.2rem; letter-spacing: 0.12em; }
+  /* Invite box */
+  .invite-box {
+    background: linear-gradient(135deg, #06B6D4, #06D6A0);
+    border-radius: 16px; padding: 20px; color: #fff; text-align: center;
+    margin-top: 16px;
+  }
+  .invite-box .invite-title { font-weight: 800; font-size: 1rem; margin-bottom: 8px; }
+  .invite-box .invite-link {
+    background: rgba(255,255,255,0.25); border-radius: 10px;
+    padding: 10px 14px; font-size: 0.85rem; word-break: break-all;
+    margin-bottom: 12px; font-weight: 600;
+  }
+  .invite-box .invite-code { font-size: 0.8rem; opacity: 0.85; margin-bottom: 4px; }
+  .invite-box .invite-code strong { font-size: 1.2rem; letter-spacing: 0.12em; }
 
-/* Participant list */
-.participant-item {
-display: flex; align-items: center; gap: 12px;
-padding: 12px 14px; background: var(–light);
-border-radius: 12px; margin-bottom: 8px;
-animation: slideUp 0.3s ease both;
-}
-.avatar {
-width: 40px; height: 40px; border-radius: 50%;
-display: flex; align-items: center; justify-content: center;
-font-size: 1.1rem; font-weight: 900; flex-shrink: 0;
-color: white;
-}
-.participant-info { flex: 1; }
-.participant-name { font-weight: 800; font-size: 0.95rem; }
-.participant-dates { font-size: 0.78rem; color: var(–mid); margin-top: 2px; }
+  /* Participant list */
+  .participant-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 14px; background: var(--light);
+    border-radius: 12px; margin-bottom: 8px;
+    animation: slideUp 0.3s ease both;
+  }
+  .avatar {
+    width: 40px; height: 40px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; font-weight: 900; flex-shrink: 0;
+    color: white;
+  }
+  .participant-info { flex: 1; }
+  .participant-name { font-weight: 800; font-size: 0.95rem; }
+  .participant-dates { font-size: 0.78rem; color: var(--mid); margin-top: 2px; }
 
-/* Steps indicator */
-.steps { display: flex; gap: 6px; justify-content: center; margin-bottom: 28px; }
-.step { width: 10px; height: 10px; border-radius: 50%; background: #E8E8F0; transition: all 0.3s; }
-.step.active { background: var(–coral); transform: scale(1.3); }
-.step.done { background: var(–mint); }
+  /* Steps indicator */
+  .steps { display: flex; gap: 6px; justify-content: center; margin-bottom: 28px; }
+  .step { width: 10px; height: 10px; border-radius: 50%; background: #E8E8F0; transition: all 0.3s; }
+  .step.active { background: var(--coral); transform: scale(1.3); }
+  .step.done { background: var(--mint); }
 
-/* Alert */
-.alert {
-background: #FFF3E0; border: 2px solid var(–sun); border-radius: 12px;
-padding: 10px 14px; font-size: 0.88rem; font-weight: 700; color: #B45309;
-margin-top: -6px; margin-bottom: 14px; display: flex; gap: 6px; align-items: center;
-}
+  /* Alert */
+  .alert {
+    background: #FFF3E0; border: 2px solid var(--sun); border-radius: 12px;
+    padding: 10px 14px; font-size: 0.88rem; font-weight: 700; color: #B45309;
+    margin-top: -6px; margin-bottom: 14px; display: flex; gap: 6px; align-items: center;
+  }
 
-/* Section hidden */
-.hidden { display: none !important; }
+  /* Section hidden */
+  .hidden { display: none !important; }
 
-/* Success emoji bounce */
-.bounce { animation: bounce 0.5s cubic-bezier(.36,.07,.19,.97) both; }
-@keyframes bounce {
-0%,100% { transform: scale(1); }
-40% { transform: scale(1.25); }
-60% { transform: scale(0.95); }
-}
+  /* Success emoji bounce */
+  .bounce { animation: bounce 0.5s cubic-bezier(.36,.07,.19,.97) both; }
+  @keyframes bounce {
+    0%,100% { transform: scale(1); }
+    40% { transform: scale(1.25); }
+    60% { transform: scale(0.95); }
+  }
 
-/* Nav bottom */
-.bottom-nav {
-position: fixed; bottom: 0; left: 0; right: 0;
-background: white; border-top: 2px solid #E8E8F0;
-display: flex; justify-content: space-around; padding: 10px 0 14px;
-z-index: 100;
-}
-.nav-item {
-display: flex; flex-direction: column; align-items: center; gap: 3px;
-font-size: 0.7rem; font-weight: 800; color: var(–mid); cursor: pointer;
-transition: color 0.15s; padding: 4px 12px; border-radius: 10px;
-border: none; background: none; font-family: ‘Nunito’, sans-serif;
-}
-.nav-item .nav-icon { font-size: 1.4rem; line-height: 1; }
-.nav-item.active { color: var(–coral); }
-.nav-item.active .nav-icon { animation: bounce 0.3s ease; }
+  /* Nav bottom */
+  .bottom-nav {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: white; border-top: 2px solid #E8E8F0;
+    display: flex; justify-content: space-around; padding: 10px 0 14px;
+    z-index: 100;
+  }
+  .nav-item {
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+    font-size: 0.7rem; font-weight: 800; color: var(--mid); cursor: pointer;
+    transition: color 0.15s; padding: 4px 12px; border-radius: 10px;
+    border: none; background: none; font-family: 'Nunito', sans-serif;
+  }
+  .nav-item .nav-icon { font-size: 1.4rem; line-height: 1; }
+  .nav-item.active { color: var(--coral); }
+  .nav-item.active .nav-icon { animation: bounce 0.3s ease; }
 
-/* Chips souhaits */
-.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
-.chip {
-padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 700;
-cursor: pointer; border: 2px solid #E8E8F0; background: var(–light);
-color: var(–mid); transition: all 0.15s; font-family: ‘Nunito’, sans-serif;
-}
-.chip.selected { background: var(–sun); border-color: var(–sun); color: var(–dark); }
+  /* Chips souhaits */
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+  .chip {
+    padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 700;
+    cursor: pointer; border: 2px solid #E8E8F0; background: var(--light);
+    color: var(--mid); transition: all 0.15s; font-family: 'Nunito', sans-serif;
+  }
+  .chip.selected { background: var(--sun); border-color: var(--sun); color: var(--dark); }
 
-/* Calendar */
-.cal-day {
-aspect-ratio:1; display:flex; align-items:center; justify-content:center;
-border-radius:8px; font-size:0.82rem; font-weight:700; cursor:pointer;
-transition: all 0.15s; color: var(–dark);
-}
-.cal-day:hover:not(.cal-other):not(.cal-disabled) { background: #E8F4FF; }
-.cal-day.cal-range { background: #E0F7FA; }
-.cal-day.cal-start { background: var(–sea); color: white; border-radius: 8px 0 0 8px; }
-.cal-day.cal-end { background: var(–coral); color: white; border-radius: 0 8px 8px 0; }
-.cal-day.cal-start.cal-end { border-radius: 8px; }
-.cal-day.cal-other { color: #CCC; cursor: default; }
-.cal-day.cal-disabled { color: #DDD; cursor: not-allowed; }
-.cal-header { font-size:0.7rem; font-weight:800; color:var(–mid); padding:4px 0; text-transform:uppercase; }
+  /* Calendar */
+  .cal-day {
+    aspect-ratio:1; display:flex; align-items:center; justify-content:center;
+    border-radius:8px; font-size:0.82rem; font-weight:700; cursor:pointer;
+    transition: all 0.15s; color: var(--dark);
+  }
+  .cal-day:hover:not(.cal-other):not(.cal-disabled) { background: #E8F4FF; }
+  .cal-day.cal-range { background: #E0F7FA; }
+  .cal-day.cal-start { background: var(--sea); color: white; border-radius: 8px 0 0 8px; }
+  .cal-day.cal-end { background: var(--coral); color: white; border-radius: 0 8px 8px 0; }
+  .cal-day.cal-start.cal-end { border-radius: 8px; }
+  .cal-day.cal-other { color: #CCC; cursor: default; }
+  .cal-day.cal-disabled { color: #DDD; cursor: not-allowed; }
+  .cal-header { font-size:0.7rem; font-weight:800; color:var(--mid); padding:4px 0; text-transform:uppercase; }
 
-/* Toast */
-#toast {
-position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px);
-background: var(–dark); color: white; padding: 12px 24px; border-radius: 14px;
-font-weight: 700; font-size: 0.9rem; opacity: 0; transition: all 0.3s; z-index: 200;
-white-space: nowrap;
-}
-#toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  /* Toast */
+  #toast {
+    position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: var(--dark); color: white; padding: 12px 24px; border-radius: 14px;
+    font-weight: 700; font-size: 0.9rem; opacity: 0; transition: all 0.3s; z-index: 200;
+    white-space: nowrap;
+  }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 </style>
-
 </head>
 <body>
 <div class="app">
 
   <!-- LANG TOGGLE -->
-
   <div class="lang-toggle">
     <button class="lang-btn active" onclick="setLang('fr')">🇫🇷 FR</button>
     <button class="lang-btn" onclick="setLang('en')">🇬🇧 EN</button>
   </div>
 
   <!-- HEADER -->
-
   <div class="header">
     <div class="logo">CoLo<span>Cool</span> 🌴</div>
     <div class="tagline" data-i18n="tagline">Organise tes vacances en groupe, sans prise de tête</div>
   </div>
 
   <!-- STEPS -->
-
   <div class="steps" id="steps">
     <div class="step active" id="step0"></div>
     <div class="step" id="step1"></div>
@@ -271,7 +266,6 @@ white-space: nowrap;
   </div>
 
   <!-- ======================== VIEW: HOME ======================== -->
-
   <div id="view-home">
     <div class="card" style="animation-delay:0.05s">
       <div class="card-title">✨ <span data-i18n="createOrJoin">Créer ou rejoindre</span></div>
@@ -282,83 +276,75 @@ white-space: nowrap;
         🔗 <span data-i18n="joinStay">Rejoindre un séjour</span>
       </button>
 
-```
-</div>
+    </div>
 
-<!-- Si un séjour existe déjà -->
-<div id="existing-stay" class="hidden">
-  <div class="card" style="animation-delay:0.1s">
-    <div class="card-title">📋 <span data-i18n="mySejour">Mon séjour</span></div>
-    <div id="existing-info"></div>
-    <button class="btn btn-primary" onclick="goToStay()" style="margin-top:12px">
-      <span data-i18n="openStay">Ouvrir le séjour</span> →
-    </button>
-  </div>
-</div>
-```
-
+    <!-- Si un séjour existe déjà -->
+    <div id="existing-stay" class="hidden">
+      <div class="card" style="animation-delay:0.1s">
+        <div class="card-title">📋 <span data-i18n="mySejour">Mon séjour</span></div>
+        <div id="existing-info"></div>
+        <button class="btn btn-primary" onclick="goToStay()" style="margin-top:12px">
+          <span data-i18n="openStay">Ouvrir le séjour</span> →
+        </button>
+      </div>
+    </div>
   </div>
 
   <!-- ======================== VIEW: CRÉER ======================== -->
-
   <div id="view-create" class="hidden">
     <div class="card">
       <div class="card-title">🏠 <span data-i18n="createStay">Créer un séjour</span></div>
 
-```
-  <label data-i18n="stayName">Nom du séjour</label>
-  <input type="text" id="stay-name" placeholder="Ex: Week-end à la mer 🌊" />
+      <label data-i18n="stayName">Nom du séjour</label>
+      <input type="text" id="stay-name" placeholder="Ex: Week-end à la mer 🌊" />
 
-  <label data-i18n="location">Lieu</label>
-  <input type="text" id="stay-location" placeholder="Ex: Île de Ré" />
+      <label data-i18n="location">Lieu</label>
+      <input type="text" id="stay-location" placeholder="Ex: Île de Ré" />
 
-  <label>Dates du séjour</label>
-  <!-- Affichage résumé des dates sélectionnées -->
-  <div id="date-summary" onclick="toggleCalendar()" style="cursor:pointer;background:var(--light);border:2px solid #E8E8F0;border-radius:12px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;transition:border-color 0.2s">
-    <span id="date-summary-text" style="font-weight:700;color:var(--mid)">Choisir les dates…</span>
-    <span id="nights-badge" style="display:none;background:var(--sun);color:var(--dark);font-weight:800;font-size:0.82rem;padding:3px 10px;border-radius:20px"></span>
-  </div>
-  <!-- Inputs cachés pour compatibilité avec le reste du code -->
-  <input type="hidden" id="stay-start" />
-  <input type="hidden" id="stay-end" />
-  <!-- Calendrier custom -->
-  <div id="range-calendar" style="display:none;background:white;border:2px solid #E8E8F0;border-radius:16px;padding:16px;margin-bottom:14px;box-shadow:var(--shadow)">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-      <button onclick="calNav(-1)" style="border:none;background:var(--light);border-radius:8px;padding:6px 12px;cursor:pointer;font-size:1rem">◀</button>
-      <span id="cal-month-label" style="font-weight:800;font-size:0.95rem;color:var(--dark)"></span>
-      <button onclick="calNav(1)" style="border:none;background:var(--light);border-radius:8px;padding:6px 12px;cursor:pointer;font-size:1rem">▶</button>
+      <label>Dates du séjour</label>
+      <!-- Affichage résumé des dates sélectionnées -->
+      <div id="date-summary" onclick="toggleCalendar()" style="cursor:pointer;background:var(--light);border:2px solid #E8E8F0;border-radius:12px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;transition:border-color 0.2s">
+        <span id="date-summary-text" style="font-weight:700;color:var(--mid)">Choisir les dates…</span>
+        <span id="nights-badge" style="display:none;background:var(--sun);color:var(--dark);font-weight:800;font-size:0.82rem;padding:3px 10px;border-radius:20px"></span>
+      </div>
+      <!-- Inputs cachés pour compatibilité avec le reste du code -->
+      <input type="hidden" id="stay-start" />
+      <input type="hidden" id="stay-end" />
+      <!-- Calendrier custom -->
+      <div id="range-calendar" style="display:none;background:white;border:2px solid #E8E8F0;border-radius:16px;padding:16px;margin-bottom:14px;box-shadow:var(--shadow)">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+          <button onclick="calNav(-1)" style="border:none;background:var(--light);border-radius:8px;padding:6px 12px;cursor:pointer;font-size:1rem">◀</button>
+          <span id="cal-month-label" style="font-weight:800;font-size:0.95rem;color:var(--dark)"></span>
+          <button onclick="calNav(1)" style="border:none;background:var(--light);border-radius:8px;padding:6px 12px;cursor:pointer;font-size:1rem">▶</button>
+        </div>
+        <div id="cal-grid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;text-align:center"></div>
+      </div>
+
+      <label data-i18n="priceType">Prix hébergement 🏠</label>
+      <div class="toggle-group">
+        <button class="toggle-opt active" onclick="setPriceType('global')" id="pt-global" data-i18n="priceGlobal">Total séjour</button>
+        <button class="toggle-opt" onclick="setPriceType('pernight')" id="pt-pernight" data-i18n="pricePerNight">Par nuit</button>
+        <button class="toggle-opt" onclick="setPriceType('free')" id="pt-free" data-i18n="priceFree">Offert 🎁</button>
+      </div>
+
+      <div id="price-input-wrap">
+        <label id="price-label" data-i18n="totalPrice">Prix total (€)</label>
+        <input type="number" id="stay-price" placeholder="0" min="0" />
+      </div>
+
+      <label data-i18n="yourName">Ton prénom (organisateur)</label>
+      <input type="text" id="org-name" placeholder="Ex: Marie" />
+
+      <button class="btn btn-primary" onclick="createStay()">
+        🚀 <span data-i18n="createBtn">Créer le séjour</span>
+      </button>
+      <button class="btn btn-outline btn-sm" onclick="window._editMode ? (window._editMode=false, showView('view-stay')) : showView('view-home')" style="margin-top:10px;width:100%">
+        ← <span data-i18n="back">Retour</span>
+      </button>
     </div>
-    <div id="cal-grid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;text-align:center"></div>
-  </div>
-
-  <label data-i18n="priceType">Prix hébergement 🏠</label>
-  <div class="toggle-group">
-    <button class="toggle-opt active" onclick="setPriceType('global')" id="pt-global" data-i18n="priceGlobal">Total séjour</button>
-    <button class="toggle-opt" onclick="setPriceType('pernight')" id="pt-pernight" data-i18n="pricePerNight">Par nuit</button>
-    <button class="toggle-opt" onclick="setPriceType('free')" id="pt-free" data-i18n="priceFree">Offert 🎁</button>
-  </div>
-
-  <div id="price-input-wrap">
-    <label id="price-label" data-i18n="totalPrice">Prix total (€)</label>
-    <input type="number" id="stay-price" placeholder="0" min="0" />
-  </div>
-
-  <label data-i18n="yourName">Ton prénom (organisateur)</label>
-  <input type="text" id="org-name" placeholder="Ex: Marie" />
-
-  <button class="btn btn-primary" onclick="createStay()">
-    🚀 <span data-i18n="createBtn">Créer le séjour</span>
-  </button>
-  <button class="btn btn-outline btn-sm" onclick="window._editMode ? (window._editMode=false, showView('view-stay')) : showView('view-home')" style="margin-top:10px;width:100%">
-    ← <span data-i18n="back">Retour</span>
-  </button>
-</div>
-```
-
   </div>
 
   <!-- ======================== VIEW: REJOINDRE ======================== -->
-
   <div id="view-join" class="hidden">
     <div class="card">
       <div class="card-title">🔗 <span data-i18n="joinStay">Rejoindre un séjour</span></div>
@@ -374,57 +360,52 @@ white-space: nowrap;
   </div>
 
   <!-- ======================== VIEW: PROFIL PARTICIPANT ======================== -->
-
   <div id="view-profile" class="hidden">
     <div class="card">
       <div class="card-title">👤 <span data-i18n="myProfile">Mon profil</span></div>
       <div id="stay-welcome" style="background:linear-gradient(135deg,#FF6B6B,#FFD166);border-radius:14px;padding:14px 16px;color:white;font-weight:800;font-size:1rem;margin-bottom:18px"></div>
 
-```
-  <label data-i18n="firstName">Prénom</label>
-  <input type="text" id="p-name" placeholder="Ton prénom" />
+      <label data-i18n="firstName">Prénom</label>
+      <input type="text" id="p-name" placeholder="Ton prénom" />
 
-  <div class="field-row">
-    <div>
-      <label data-i18n="arrival">Arrivée</label>
-      <input type="date" id="p-start" />
+      <div class="field-row">
+        <div>
+          <label data-i18n="arrival">Arrivée</label>
+          <input type="date" id="p-start" />
+        </div>
+        <div>
+          <label data-i18n="departure">Départ</label>
+          <input type="date" id="p-end" />
+        </div>
+      </div>
+
+      <label data-i18n="breakfastWishes">Souhaits petit-déj 🥐</label>
+      <div class="chips" id="breakfast-chips">
+        <button class="chip" onclick="toggleChip(this)" data-val="café">☕ Café</button>
+        <button class="chip" onclick="toggleChip(this)" data-val="thé">🍵 Thé</button>
+        <button class="chip" onclick="toggleChip(this)" data-val="jus d'orange">🍊 Jus d'orange</button>
+        <button class="chip" onclick="toggleChip(this)" data-val="tartines">🍞 Tartines</button>
+        <button class="chip" onclick="toggleChip(this)" data-val="croissants">🥐 Croissants</button>
+        <button class="chip" onclick="toggleChip(this)" data-val="yaourts">🥛 Yaourts</button>
+        <button class="chip" onclick="toggleChip(this)" data-val="fruits">🍎 Fruits</button>
+        <button class="chip" onclick="toggleChip(this)" data-val="céréales">🥣 Céréales</button>
+        <button class="chip" onclick="toggleChip(this)" data-val="œufs">🥚 Œufs</button>
+        <button class="chip" onclick="toggleChip(this)" data-val="fromage">🧀 Fromage</button>
+      </div>
+
+      <label data-i18n="otherWishes">Autre souhait ?</label>
+      <div style="display:flex;gap:8px;margin-bottom:14px">
+        <input type="text" id="p-breakfast-other" placeholder="Ajouter..." style="margin-bottom:0;flex:1" onkeydown="if(event.key==='Enter'){event.preventDefault();addCustomChip()}" />
+        <button onclick="addCustomChip()" style="border:none;background:var(--sea);color:white;border-radius:12px;padding:0 16px;font-size:1.2rem;cursor:pointer;flex-shrink:0">+</button>
+      </div>
+
+      <button class="btn btn-primary" onclick="saveProfile()">
+        ✅ <span data-i18n="saveProfile">Enregistrer mon profil</span>
+      </button>
     </div>
-    <div>
-      <label data-i18n="departure">Départ</label>
-      <input type="date" id="p-end" />
-    </div>
-  </div>
-
-  <label data-i18n="breakfastWishes">Souhaits petit-déj 🥐</label>
-  <div class="chips" id="breakfast-chips">
-    <button class="chip" onclick="toggleChip(this)" data-val="café">☕ Café</button>
-    <button class="chip" onclick="toggleChip(this)" data-val="thé">🍵 Thé</button>
-    <button class="chip" onclick="toggleChip(this)" data-val="jus d'orange">🍊 Jus d'orange</button>
-    <button class="chip" onclick="toggleChip(this)" data-val="tartines">🍞 Tartines</button>
-    <button class="chip" onclick="toggleChip(this)" data-val="croissants">🥐 Croissants</button>
-    <button class="chip" onclick="toggleChip(this)" data-val="yaourts">🥛 Yaourts</button>
-    <button class="chip" onclick="toggleChip(this)" data-val="fruits">🍎 Fruits</button>
-    <button class="chip" onclick="toggleChip(this)" data-val="céréales">🥣 Céréales</button>
-    <button class="chip" onclick="toggleChip(this)" data-val="œufs">🥚 Œufs</button>
-    <button class="chip" onclick="toggleChip(this)" data-val="fromage">🧀 Fromage</button>
-  </div>
-
-  <label data-i18n="otherWishes">Autre souhait ?</label>
-  <div style="display:flex;gap:8px;margin-bottom:14px">
-    <input type="text" id="p-breakfast-other" placeholder="Ajouter..." style="margin-bottom:0;flex:1" onkeydown="if(event.key==='Enter'){event.preventDefault();addCustomChip()}" />
-    <button onclick="addCustomChip()" style="border:none;background:var(--sea);color:white;border-radius:12px;padding:0 16px;font-size:1.2rem;cursor:pointer;flex-shrink:0">+</button>
-  </div>
-
-  <button class="btn btn-primary" onclick="saveProfile()">
-    ✅ <span data-i18n="saveProfile">Enregistrer mon profil</span>
-  </button>
-</div>
-```
-
   </div>
 
   <!-- ======================== VIEW: SÉJOUR DASHBOARD ======================== -->
-
   <div id="view-stay" class="hidden">
     <div class="card" style="animation-delay:0.05s">
       <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px">
@@ -443,27 +424,25 @@ white-space: nowrap;
       </div>
     </div>
 
-```
-<!-- Participants -->
-<div class="card" style="animation-delay:0.1s">
-  <div class="card-title">👥 <span data-i18n="participants">Participants</span></div>
-  <div id="participants-list"></div>
-  <div id="no-participants" style="color:var(--mid);font-size:0.9rem;text-align:center;padding:10px 0"></div>
-</div>
+    <!-- Participants -->
+    <div class="card" style="animation-delay:0.1s">
+      <div class="card-title">👥 <span data-i18n="participants">Participants</span></div>
+      <div id="participants-list"></div>
+      <div id="no-participants" style="color:var(--mid);font-size:0.9rem;text-align:center;padding:10px 0"></div>
+    </div>
 
-<!-- Résumé hébergement -->
-<div class="card" style="animation-delay:0.15s">
-  <div class="card-title">🏠 <span data-i18n="lodging">Hébergement</span></div>
-  <div id="lodging-summary"></div>
-</div>
-```
+    <!-- Résumé hébergement -->
+    <div class="card" style="animation-delay:0.15s">
+      <div class="card-title">🏠 <span data-i18n="lodging">Hébergement</span></div>
+      <div id="lodging-summary"></div>
+    </div>
+
 
   </div>
 
 </div><!-- /app -->
 
 <!-- BOTTOM NAV (shown only in stay view) -->
-
 <div class="bottom-nav hidden" id="bottom-nav">
   <button class="nav-item active" onclick="showTab('view-stay')">
     <span class="nav-icon">🏠</span>
@@ -1152,6 +1131,5 @@ async function init() {
 
 init();
 </script>
-
 </body>
 </html>
